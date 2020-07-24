@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Day 5 Task</title>
+
+
+	<script type="text/javascript">
+
+		// studentData=["RollNo", "StudentName", "CollegeName", "Marks", "Sem"];
+
+	
+
+		studs=[['roll No','name','clg id' ,'contact no'],['1','raj','1' ,'998877'],['2','ram','2' ,'998877'] ]
+
+		document.write("Dynamic Table");
+
+		document.write("<table border='1px'>");
+
+		for(i=0;i<studs.length;i++){
+		document.write("<tr>")
+
+		for(j=0;j<studs[i].length;j++){
+		console.log(i+" "+j);
+		document.write("<td> "+studs[i][j]+"</td>")
+		}
+		document.write("</tr>")
+		}
+		document.write("</table>");
+
+
+
+
+
+
+
+
+
+		function lowerCase(e) {
+
+			if(!(e.which>=97 && e.which<=122))
+			{
+				e.preventDefault();
+			}
+
+		}
+
+
+
+
+		function isAlpha(e) {
+
+			if(!((e.which>=65 && e.which<=90) || (e.which>=97 && e.which<=122)))
+			{
+				e.preventDefault();
+			}
+
+		}
+
+
+
+		function cursor() {
+
+			document.getElementById("btn").style.cursor="pointer"
+
+
+		}
+
+
+
+		function hideImage(){
+
+			document.getElementById("img").style.visibility="hidden"
+		}
+
+
+		function showImage(){
+
+			document.getElementById("img").style.visibility="visible"
+		}
+
+
+
+
+
+		function brwsrWindow(){
+
+			window.open("https://www.google.com");
+		}
+
+
+
+
+
+		function fullName(){
+
+			var fname = document.getElementById("fn").value;
+			var lname = document.getElementById("ln").value;
+			var fullname = document.getElementById("nm");
+			fullname = fname+lname
+
+			window.alert("Full Name is "+fullname);
+
+		}
+
+
+
+		function dollarToRupee(){
+
+			var d = prompt("Enter dollar value");
+			var rupee=parseInt(d)*74;
+			window.alert("Rupee value is "+rupee);
+
+		}
+
+
+
+
+
+
+
+
+
+	</script>
+
+
+
+</head>
+<body onload="dollarToRupee()">
+
+<br><br><br>
+
+
+<table border="1" style="border-collapse: collapse;">
+	<h3>Column span</h3>
+
+		<tr>
+			<td>Favorite Animal</td>
+			<td colspan="2">Favorite Food</td>
+			<td>Favorite Color</td>
+		</tr>
+
+		<tr>
+			<td>Kitty</td>
+			<td>Biryani</td>
+			<td>Non-veg/Veg</td>
+			<td>Blue</td>
+		</tr>
+
+		<tr>
+			<td>Horse</td>
+			<td>Noodles</td>
+			<td>Non-veg/Veg</td>
+			<td>Black</td>
+		</tr>
+		<tr>
+			<td>Rabbit</td>
+			<td>Pasta</td>
+			<td>Non-veg/Veg</td>
+			<td>Orange</td>
+		</tr>
+
+</table>
+
+
+
+<br><br><br>
+
+
+<h3>Row span</h3>
+<table border="1" style="border-collapse: collapse;">
+
+		<tr>
+			<td></td>
+			<td>9:00-10:00 AM</td>
+			<td>10:00-11:00 AM</td>
+			<td>11:00 PM</td>
+		</tr>
+
+		<tr>
+			<td>Day1</td>
+			<td>Practice drawing</td>
+			<td>Cook Biryani</td>
+			<td>Sleep</td>
+		</tr>
+
+		<tr>
+			<td rowspan="2">Day2</td>
+			<td>Read Books</td>
+			<td>Cook Noodles</td>		
+			<td>Sleep</td>
+		</tr>
+		<tr>
+			<td>Practice Coding</td>
+			<td>Cook Pasta</td>
+			<td>Sleep</td>
+		</tr>
+</table>
+
+
+<br><br><br>
+
+
+<hr>
+<br><br>
+
+	Enter text in lower case: <input type="text" id="lc" onkeypress="lowerCase(event)"> <br><br>
+<hr>
+	Enter only alphabets: <input type="text" id="alpha" onkeypress="isAlpha(event)"> <br><br>
+<hr>
+	<button id="btn" onmouseover="cursor()" style="background-color:#0fff4f; border:2px solid green; border-radius:10px;">Move the mouse over here</button> <br><br>
+<hr>
+	<img src="rapunzel.jpg" id="img" onmouseover="hideImage()" onmouseout="showImage()" alt="Rapunzel" style="width: 200px; height:200px"> <br><br>
+<hr>
+	Firstname: <input type="text" id="fn"> &nbsp &nbsp Lastname: <input type="text" id="ln"> &nbsp &nbsp
+	<button id="nm" onclick="fullName()" style="background-color: #1694d9; color:white; border-radius:10px;">Click here for Full Name</button> <br><br>
+
+	<!-- Full Name is <input type="name" id="name"> -->
+
+<hr>
+	<p>Click here to open google page in a new browser window</p>
+	<button onclick="brwsrWindow()" style="background-color: #ab0aa3; color:white; border-radius:10px;">Click here</button>
+
+
+
+
+
+
+
+
+
+
+<hr>
+
+
+
+
+	<p>Move your mouse anywhere on the screen to see its position!</p>
+    <p id="scrn"></p>
+
+
+
+
+ 	<script type="text/javascript">
+        
+        let screenLog = document.querySelector('#scrn');
+        document.addEventListener('mousemove', logKey);
+
+        function logKey(e) {
+          screenLog.innerText = 
+            `Screen X/Y: ${e.screenX}, ${e.screenY}`;
+        }
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
