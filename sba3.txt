@@ -1,0 +1,570 @@
+
+
+SBA3:
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Diplaying Attendance</title>
+<style type="text/css">
+td
+{
+background-color: #e5a5fa;
+font-family:Lucida Calligraphy;
+font-size: 25px;
+height:50px;
+}
+th
+{
+background-color: #96098e;
+font-family:Lucida Calligraphy;
+color: white;
+font-size: 25px;
+height:50px;
+}
+td:hover
+{
+background-color: #96098e;
+color: white;
+}
+th:hover
+{
+background-color: #e5a5fa;
+}
+table {
+margin-left:auto; 
+margin-right:auto;
+margin-top:50px;
+}
+#sbtr
+{
+margin-left:800px; 
+margin-right:auto;
+margin-top:50px;
+}
+</style>
+</head>
+<body>
+<table width="50%">
+<tr>
+<th>Student ID</th>
+<th>Name</th>
+<th>Date</th>
+<th>Attendance</th>
+</tr>
+<c:forEach var="attnd" items="${attdList}">	
+<tr>	
+	<td>${attnd.getStudId()}</td>
+	<td>${attnd.getStudName()}</td>
+	<td>${attnd.getAttdDate()}</td>
+	<td>${attnd.getAttendance()}</td>
+</tr>
+</c:forEach>
+</table>
+<form action='RetrvDesign.jsp'>
+<input id="sbtr" type='submit' value='Back to Main Page' class="btn btn-success">
+</form>
+</body>
+</html>
+
+
+
+
+-----------------------------------------------------------
+
+public class SuccessSrv extends HttpServlet {
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session= req.getSession();	
+		int sem = (int)session.getAttribute("sem");	
+		String aDate = (String)session.getAttribute("aDate");	
+		String[] datas=req.getParameterValues("status");
+		for(String data:datas)	{		
+		System.out.println(data);
+		}	
+		ArrayList<Student> prstStud =new ArrayList<>();
+		PrintWriter out= resp.getWriter();
+		resp.setContentType("text/html");		
+		StudentDao dao=new StudentDao();		
+		ArrayList<Student> studList3=(ArrayList<Student>) session.getAttribute("studList2");
+		ArrayList<Student> studList4=new ArrayList<Student>();
+		int j=0;
+		for(Student st:studList3) {	
+		
+			if((j<datas.length) && st.getStudId()==Integer.parseInt(datas[j])) {
+				j++;					
+			}
+			else	{				
+
+				int absntStuds = st.getStudId();
+			studList4.add(st);
+			
+			}
+		}
+		
+		j=0;
+		int f1=0;
+		Attendance attendance1[] = new Attendance[prstStud.size()];
+		for(Student stud:prstStud)
+		{
+			int studId = stud.getStudId();
+			String studName = stud.getStudName();
+			int semester = stud.getSem();			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date attdDate=null;
+			try {
+				 attdDate = sdf.parse(aDate);
+			} 
+			catch (ParseException e) {
+				e.printStackTrace();
+			}	
+			
+			attendance1[j] = new Attendance(studId, studName, semester, attdDate, "Present");
+
+				
+		String atd1 = dao.saveAttendace(attendance1[j]);
+		j++;
+		if(atd1.equals("Cannot save attendance"))
+		{
+			f1=1;
+		}
+		
+	}
+		if(f1==1)
+			out.print("Cannot save attendance\n");
+		else
+			out.print("Attendance saved!\n");
+	
+		//StudentDao dao = new StudentDao();
+		j=0;
+		int f=0;
+		Attendance attendance[] =new Attendance[studList4.size()];
+		for(Student stud:studList4)
+		{
+			int studId = stud.getStudId();
+			String studName = stud.getStudName();
+			int semester = stud.getSem();
+
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date attdDate=null;
+			try {
+				 attdDate = sdf.parse(aDate);
+			} 
+			catch (ParseException e) {
+				e.printStackTrace();
+			}	
+			
+			attendance[j] = new Attendance(studId, studName, semester, attdDate, "Absent");
+		String atd = dao.saveAttendace(attendance[j]);
+		j++;
+		if(atd.equals("Cannot save attendance"))
+		{
+			f=1;
+		}
+		
+	}
+		if(f==1)
+			out.print("Cannot save attendance\n");
+		else
+			out.print("Attendance saved!\n");	
+
+out.print("<form action='SemDesign.jsp'>");
+out.print("<input type='submit' value='Back to Main Page'>");
+out.print("</form>");
+	
+
+	}
+	
+}
+
+----------------------------
+
+public class MarkAttendance extends HttpServlet {
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	
+		int sem = Integer.parseInt(req.getParameter("sem"));
+		
+		String aDate = req.getParameter("aDate");
+
+
+		PrintWriter out= resp.getWriter();
+		resp.setContentType("text/html");
+				
+		StudentDao dao = new StudentDao();
+		ArrayList<Student> studList2=dao.getStudentBySem(sem);
+
+			
+		HttpSession session= req.getSession();
+		session.setAttribute("studList2", studList2);	
+		
+		session.setAttribute("sem", sem);
+		session.setAttribute("aDate", aDate);
+
+		
+
+					
+		RequestDispatcher rd= req.getRequestDispatcher("StudListAttendance.jsp");
+		rd.forward(req, resp);
+		
+------------------------------------------------
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<title>Attendance Marking</title>
+
+<script type="text/javascript">
+
+function validateDate() {
+	var d=new Date();
+	var yyyy=d.getFullYear();
+	var mon=d.getMonth()+1;
+	var dd=d.getDate();
+	if(mon<10)	{
+		mon='0'+mon;
+	}
+	if(dd<10)	{
+		dd='0'+dd;
+	}
+	document.getElementById('mxdt').max=yyyy+'-'+mon+'-'+dd;
+}
+</script>
+
+
+
+
+<style type="text/css">
+
+#sbt3
+{
+font-family:Lucida Calligraphy;
+font-size: 15px;
+height:30px;
+margin-left:540px;
+margin-top:-30px;
+}
+
+body {
+background-image:url("atw.jpg");
+color:white;
+}
+
+#semslt {
+margin-left:440px;
+margin-top:20px;
+font-size:20px;
+}
+
+#dtid {
+margin-left:440px;
+margin-top:100px;
+font-size:20px;
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<form action="MarkAttendance">
+
+<div id="dtid">Select date: <input type="date" name="aDate" id="mxdt" onclick="validateDate()"></div>
+<br><br>
+
+<div id="semslt">
+Semester: <select name="sem">
+<option>Select semester</option>
+<option value="1"> Sem 1 </option>
+<option value="2"> Sem 2 </option>
+<option value="3"> Sem 3 </option>
+<option value="4"> Sem 4 </option>
+<option value="5"> Sem 5 </option>
+<option value="6"> Sem 6 </option>
+<option value="7"> Sem 7 </option>
+<option value="8"> Sem 8 </option>
+</select>
+</div>
+
+<br><br>
+<input type="submit" id="sbt3" value="mark attendance"  type="button" class="btn btn-success">
+
+</form>
+
+</body>
+</html>
+
+-------------------------------------------------
+
+
+
+<!DOCTYPE html>
+<html>
+
+<style type="text/css">
+
+td
+{
+background-color: #a5facf;
+font-family:Lucida Calligraphy;
+font-size: 25px;
+}
+
+#sbt 
+{
+background-color: #1760cf;
+color:white;
+width:200px;
+height:50px;
+}
+
+#chkb 
+{
+width:20px;
+height:30px;
+}
+
+</style>
+
+<meta charset="ISO-8859-1">
+<title>Attendance Marking</title>
+</head>
+<body>
+<form action="SuccessSrv">
+<table width="50%" >
+<tr> 
+<td>Student Id</td> 
+<td>Student Name</td>  
+</tr>
+<%
+ArrayList<Student> studList2=(ArrayList<Student>) session.getAttribute("studList2");
+for(Student stud:studList2)	{
+	out.print("<tr>");	
+	out.print("<td>"+stud.getStudId()+"</td>");
+	out.print("<td>"+stud.getStudName()+"</td>");
+	out.print("<td> <input type='checkbox' id='chkb' name='status' value='"+stud.getStudId()+"'> </td>");	
+	out.print("</tr>");	
+	//session.setAttribute("status", status);
+}
+	session.setAttribute("studList2", studList2);
+%>
+</table>
+<tr><td></td><td><input type="submit" id="sbt"></td></tr>
+<%           
+int sem = (int)session.getAttribute("sem");
+String aDate = (String)session.getAttribute("aDate");
+session.setAttribute("sem", sem);
+session.setAttribute("aDate", aDate);
+%>
+</form>
+</body>
+</html>
+
+-------------------------------------------------------
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Students Attendance Retrieving</title>
+<style type="text/css">
+#sbt2	{
+background-color: #e5a5fa;
+font-family:Lucida Calligraphy;
+font-size: 15px;
+height:30px;
+}
+</style>
+<script type="text/javascript">
+function validateDate() {
+	var d=new Date();
+	var yyyy=d.getFullYear();
+	var mon=d.getMonth()+1;
+	var dd=d.getDate();
+	if(mon<10)	{
+		mon='0'+mon;
+	}
+	if(dd<10)	{
+		dd='0'+dd;
+	}
+	document.getElementById('mxdt').max=yyyy+'-'+mon+'-'+dd;
+}
+</script>
+</head>
+<body>
+<form action="RetrieveAttendance">
+Select date: <input type="date" name="arDate" id="mxdt" onclick="validateDate()">
+<br><br>
+Semester: <select name="rsem">
+<option>Select semester</option>
+<option value="1"> Sem 1 </option>
+<option value="2"> Sem 2 </option>
+<option value="3"> Sem 3 </option>
+<option value="4"> Sem 4 </option>
+<option value="5"> Sem 5 </option>
+<option value="6"> Sem 6 </option>
+<option value="7"> Sem 7 </option>
+<option value="8"> Sem 8 </option>
+</select>
+<br><br>
+<input type="submit" id="sbt2" value="Retrieve Attendance">
+</form>
+</body>
+</html>
+
+------------------------------------
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    
+    
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+		
+	<%--
+	 <link rel="stylesheet" href='<c:url value="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />' />
+	--%>
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+		
+	
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Diplaying Attendance</title>
+
+<style type="text/css">
+
+td
+{
+background-color: #e5a5fa;
+font-family:Lucida Calligraphy;
+font-size: 25px;
+height:50px;
+}
+
+th
+{
+background-color: #96098e;
+font-family:Lucida Calligraphy;
+color: white;
+font-size: 25px;
+height:50px;
+}
+
+td:hover
+{
+background-color: #96098e;
+color: white;
+}
+
+
+th:hover
+{
+background-color: #e5a5fa;
+}
+
+table {
+margin-left:auto; 
+margin-right:auto;
+margin-top:50px;
+}
+
+#sbtr
+{
+margin-left:800px; 
+margin-right:auto;
+margin-top:50px;
+}
+
+</style>
+
+</head>
+<body>
+
+
+
+<table width="50%">
+
+<tr>
+<th>Student ID</th>
+<th>Name</th>
+<th>Date</th>
+<th>Attendance</th>
+</tr>
+
+<c:forEach var="attnd" items="${attdList}">	
+<tr>
+	
+	<td>${attnd.getStudId()}</td>
+	<td>${attnd.getStudName()}</td>
+	<td>${attnd.getAttdDate()}</td>
+	<td>${attnd.getAttendance()}</td>
+	
+	
+</tr>
+
+
+</c:forEach>
+
+</table>
+
+
+
+<form action='RetrvDesign.jsp'>
+<input id="sbtr" type='submit' value='Back to Main Page' class="btn btn-success">
+</form>
+
+
+</body>
+</html>
+
+
+
+
+
+----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
