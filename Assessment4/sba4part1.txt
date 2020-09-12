@@ -1,0 +1,520 @@
+
+SBA 4 - part 1
+
+package com.prod.demo;
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.prod.demo.dao.ProdDao;
+import com.prod.demo.model.Prod;
+
+@Controller
+public class HomeController {
+	
+	@Autowired
+	ProdDao dao;
+		
+	@RequestMapping(value="/")
+	public String home(Model model)	{
+		return "home";
+	}
+		
+	@RequestMapping(value="homeAdmin")
+	public String homeAdmin(Model model)	{
+		return "homeAdmin";
+	}
+	
+	@RequestMapping(value="dispAdmin")
+	public String displayAdmin(Model model)	{
+		return "dispAdmin";
+	}
+	
+	
+	@RequestMapping(value="saveProd")
+	public String saveprod(Model model,@ModelAttribute Prod prod)	{
+		return "saveProd";
+	}
+	
+	@RequestMapping(value="successAdm")
+	public String saveprodmeth(Model model,@ModelAttribute Prod prod)	{
+		String status=dao.saveProduct(prod);
+		model.addAttribute("status",status);
+		return "successAdm";
+	}
+	
+	
+	@RequestMapping(value="homeUser")
+	public String homeUser(Model model)	{
+		return "homeUser";
+	}
+	
+	
+	@RequestMapping(value="dispDltProdById")
+	public String dltdisp(Model model,@RequestParam ("prodId") int prodId)	{
+		String status=dao.deleteProductById(prodId);
+		model.addAttribute("status",status);
+		return "dispDltProdById";
+	}
+
+	
+	@RequestMapping(value="dispDltProdByName")
+	public String dltdisp2(Model model,@RequestParam ("prodName") String prodName)	{
+		String status=dao.deleteProductByName(prodName);
+		model.addAttribute("status",status);
+		return "dispDltProdByName";
+	}
+	
+	
+	@RequestMapping(value="displayProdById")
+	public String srchdisp3(Model model,@RequestParam ("prodId") int prodId)	{
+		ArrayList<Prod> pd=dao.getProductId(prodId);
+		model.addAttribute("pd",pd);
+		return "displayProdById";
+	}
+	
+	
+	@RequestMapping(value="displayProdByDesc")
+	public String srchdisp(Model model,@RequestParam ("descp") String descp)	{
+		ArrayList<Prod> pd=dao.getProductByDesc(descp);
+		model.addAttribute("pd",pd);
+		return "displayProdByDesc";
+	}
+	
+	
+	int prodId=0;	
+	@RequestMapping(value="searchForUpdate")
+	public String searchForUpdate(Model model,@RequestParam("prodId") int prodId)
+	{
+	this.prodId=prodId;
+	Prod prod=dao.getProductById(prodId);
+	model.addAttribute(prod);
+	return "updatePage";
+	}
+	
+	
+	@RequestMapping(value="updateData")
+	public String updateData(@ModelAttribute Prod prod)	{
+		prod.setProdId(prodId);
+		dao.updateProductById(prod);
+		return "updatePage";
+	}
+	
+	@RequestMapping(value="done")
+	public String endmeth(Model model)	{
+		return "done";
+	}
+	
+	
+	
+}
+
+
+-----------------------------
+
+
+
+package com.prod.demo.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Prod {
+	
+	@Id
+	private int prodId;
+	
+	private String prodName;
+	private int price;
+	private String descp;
+	
+	public Prod(int prodId, String prodName, int price, String descp) {
+		super();
+		this.prodId = prodId;
+		this.prodName = prodName;
+		this.price = price;
+		this.descp = descp;
+	}
+
+	public int getProdId() {
+		return prodId;
+	}
+
+	public void setProdId(int prodId) {
+		this.prodId = prodId;
+	}
+
+	public String getProdName() {
+		return prodName;
+	}
+
+	public void setProdName(String prodName) {
+		this.prodName = prodName;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public String getDescp() {
+		return descp;
+	}
+
+	public void setDescp(String descp) {
+		this.descp = descp;
+	}
+
+	@Override
+	public String toString() {
+		return "Prod [prodId=" + prodId + ", prodName=" + prodName + ", price=" + price + ", descp=" + descp + "]";
+	}
+	
+	public Prod() {}
+	
+
+}
+-----------------
+
+
+package com.prod.demo.dao;
+
+import java.util.ArrayList;
+
+
+import javax.transaction.Transactional;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.prod.demo.model.Prod;
+
+@Transactional
+public class ProdDao {
+	
+	
+	@Autowired
+	SessionFactory factory;
+	
+	
+	public ProdDao() {
+	// TODO Auto-generated constructor stub
+	}
+	
+	
+	public ProdDao(SessionFactory factory) {
+	super();
+	this.factory = factory;
+	}
+	
+	
+	
+	public String saveProduct(Prod prod)	{
+		try	{
+			Session session=factory.getCurrentSession();;
+			session.save(prod);
+			return "Product Created";
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "Cannot create Product";
+	}
+
+-------------------------------
+	
+	
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Admin Page</title>
+	<link href="<c:url value="/resources/css/style10.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+</head>
+<body>
+
+<pre id="logo">
+<strong>Little 
+Basket
+</strong>
+</pre>
+
+<p id="hd">
+Hello Admin!
+</p>
+
+<form action="saveProd" id="svp">
+<input type="submit" value="Create Product" class="btn btn-dark">
+</form>
+
+<form action="updatePage" id="ufm">
+<input type="submit" value="Update Product by Name" class="btn btn-dark">
+</form>
+
+<form action="dltProdById" id="dfm1">
+<input type="submit" value="Delete Product by Id" class="btn btn-dark">
+</form>
+
+<form action="dltProdByName" id="dfm2">
+<input type="submit" value="Delete Product by Name" class="btn btn-dark">
+</form>
+
+</body>
+</html>
+-----------------------------------------
+
+
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Home</title>
+	<title>Home</title>
+	<link href="<c:url value="/resources/css/wlcmstyle.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+</head>
+<body>
+
+<pre id="logo">
+<strong>Little 
+Basket
+</strong>
+</pre>
+
+<h1 id="hd">{status}</h1>
+
+<form action="dispAdmin">
+<input type="submit" value="Get back to main page" class="btn btn-success btn-lg">
+</form>
+
+</body>
+</html>
+
+-------------------
+	
+	
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+		<title>Home</title>
+	<link href="<c:url value="/resources/css/wlcmstyle.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+
+</head>
+<body>
+
+<pre id="logo">
+<strong>Little 
+Basket
+</strong>
+</pre>
+
+<h1 id="hd">{status}</h1>
+
+
+
+
+
+<form action="dispAdmin">
+<input type="submit" value="Get back to main page" class="btn btn-success btn-lg">
+</form>
+
+
+</body>
+</html>
+
+-------------------------
+
+
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Home</title>
+	<link href="<c:url value="/resources/css/style5.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body>
+<p id="hd">
+Product Details:
+</p>
+
+<table border="border" width="50%">
+<tr id="trh"> <td> Name </td> <td> Id</td> <td> Price </td> <td> Description </td> </tr>
+
+<c:forEach items="${pd}" var="pd">
+<tr id="trh">
+<td>  ${pd.prodName} </td>
+<td>  ${pd.prodId} </td>
+<td>  ${pd.price} </td>
+<td>  ${pd.descp} </td>
+</tr>
+</c:forEach>
+
+</table>
+
+
+<form action="dispUser">
+<input type="submit" id="bck" value="Get back to main page" class="btn btn-warning">
+</form>
+
+</body>
+</html>
+-------------------------
+
+
+
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Home</title>
+	<link href="<c:url value="/resources/css/style5.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+</head>
+<body>
+<p id="hd">
+Product Details:
+</p>
+
+<table border="border" width="50%">
+<tr id="trh"> <td> Name </td> <td> Id </td> <td> Price </td> <td>Description</td>  </tr>
+
+<c:forEach items="${pd}" var="pd">
+<tr id="trd">
+<td>  ${pd.prodName} </td>
+<td>  ${pd.prodId} </td>
+<td>  ${pd.price} </td>
+<td>  ${pd.descp} </td>
+</tr>
+</c:forEach>
+
+</table>
+
+<form action="dispUser">
+<input type="submit" id="bck" value="Get back to main page" class="btn btn-warning">
+</form>
+
+
+</body>
+</html>
+------------------------------
+
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Home</title>
+	<link href="<c:url value="/resources/css/style5.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+</head>
+<body>
+<p id="hd">
+Product Details:
+</p>
+
+<table border="border" width="50%">
+<tr id="trh"> <td> Name </td> <td> Id </td> <td> Price </td> <td>Description</td>  </tr>
+
+<c:forEach items="${pd}" var="pd">
+<tr id="trd">
+<td>  ${pd.prodName} </td>
+<td>  ${pd.prodId} </td>
+<td>  ${pd.price} </td>
+<td>  ${pd.descp} </td>
+</tr>
+</c:forEach>
+
+</table>
+
+<form action="dispUser">
+<input type="submit" id="bck" value="Get back to main page" class="btn btn-warning">
+</form>
+
+</body>
+</html>
+---------------------------
+
+
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Home</title>
+	<link href="<c:url value="/resources/css/endstyle.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+
+</head>
+<body>
+
+<pre id="logo">
+<strong>Little 
+Basket
+</strong>
+</pre>
+
+<p id="hd">Visit Again!</p>
+
+
+<form action="/demo">
+<input type="submit" id="hpg" value="home page" class="btn btn-success">
+</form>
+
+
+
+</body>
+</html>
+
+---------------------------
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Home</title>
+	<link href="<c:url value="/resources/css/style8.css" />" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+</head>
+<body>
+<pre id="hd">
+Enter description to get 
+the related products:
+</pre>
+
+<form action="displayProdByDesc" id="fm">
+<input type="text" name="descp">
+<input type="submit" value="Search Products" class="btn btn-success">
+</form>
+
+</body>
+</html>
