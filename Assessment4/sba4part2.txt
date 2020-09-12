@@ -1,0 +1,410 @@
+
+
+SBA4 - part2
+
+Home Controller:
+
+@Controller
+public class HomeController {
+
+	@Autowired
+	DxcUsersDao dao;
+	
+	
+	@RequestMapping(value="/")
+	public String home(Model model)	{
+		return "home";
+	}
+	
+	
+	@RequestMapping(value="saveUser")
+	public String savemeth(Model model,@ModelAttribute DxcUsers dxcUsers)	{
+		return "saveUser";
+	}
+	
+	@RequestMapping(value="dispy")
+	public String disp(Model model,@ModelAttribute DxcUsers dxcUsers)	{
+		String status=dao.saveUser(dxcUsers);
+		System.out.println(status);
+		model.addAttribute("status",status);
+		return "dispy";
+	}
+	
+	
+
+	
+	
+	
+	@RequestMapping(value="loginPage")
+	public String loginmethod(Model model,@ModelAttribute DxcUsers dxcUsers)	{
+		return "loginPage";
+	}
+	
+	@RequestMapping(value="loginStatus")
+	public String loginstatus(Model model, @RequestParam ("userId") String userId, @RequestParam ("password") String password)	{
+
+		String status=dao.validateUser(userId,password);
+
+		model.addAttribute("status",status);
+
+		return "loginStatus";
+	}
+	
+
+	
+	
+	
+	
+	@RequestMapping(value="forgotPassword")
+	public String forgotmeth(Model model,@ModelAttribute DxcUsers dxcUsers)	{
+		return "forgotPassword";
+	}
+	
+	
+	
+	@RequestMapping(value="fpassStatus")
+	public String dispforgot(Model model, @RequestParam ("userId") String userId, @RequestParam ("securityQuestion") String securityQuestion, @RequestParam ("securityAnswer") String securityAnswer)	{		
+		String status=dao.validatefpass(userId,securityQuestion,securityAnswer);
+		System.out.println(status);
+		if(status.equals("Successful!"))
+		{
+			model.addAttribute("userId",userId);
+
+		return "changePassword";
+
+		}
+		else
+		{
+			return "forgotPassword";
+		}
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value="changePassword")
+	public String dispchange(Model model, @RequestParam ("password") String password, @RequestParam ("cpassword") String cpassword, @RequestParam ("usrId") String usrId)	{		
+		
+		String status=null;
+		if(password.equalsIgnoreCase(cpassword))	{
+			status=dao.changePass(password, usrId);
+			model.addAttribute("status",status);
+		}
+		else
+			status="Passwords must match!";
+		
+		model.addAttribute("status",status);
+
+		return "cpassStatus";
+	}	
+
+	}
+
+
+
+-----------------
+
+
+
+
+
+public class DxcUsersDao {
+	
+	
+	@Autowired
+	SessionFactory sessionFactor;
+
+	public String saveUser(DxcUsers dxcUsers)	{
+		try	{
+			Session session=sessionFactor.getCurrentSession();
+			session.save(dxcUsers);		
+			return "User created";
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return "Cannot create user";	
+	}	
+	
+	
+	
+	
+	public String validateUser(String userId, String password)	{
+		try	{
+			Session session=sessionFactor.getCurrentSession();
+			
+			System.out.println(password);
+			
+			String hql="from DxcUsers u where u.userId=:userId and u.password=:password";
+			Query query= session.createQuery(hql);
+			query.setParameter("userId", userId);
+			query.setParameter("password", password);
+			
+			try {
+			DxcUsers usrs = (DxcUsers) query.list().get(0);	
+					
+			if(userId.equalsIgnoreCase(usrs.getUserId()) && password.equalsIgnoreCase(usrs.getPassword()))
+				return "Login Successful!";	
+			}
+			catch (Exception e) {				
+				return "Login failed";
+			}
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return "Sorry something is wrong";
+		
+	}
+	
+		
+		
+	
+	
+	
+	public String validatefpass(String userId, String securityQuestion, String securityAnswer)	{
+		try	{
+			Session session=sessionFactor.getCurrentSession();
+			String hql="from DxcUsers u where u.userId=:userId and u.securityQuestion=:securityQuestion and u.securityAnswer=:securityAnswer";
+			Query query= session.createQuery(hql);
+			query.setParameter("userId", userId);
+			query.setParameter("securityQuestion", securityQuestion);
+			query.setParameter("securityAnswer", securityAnswer);
+			
+			try {
+			DxcUsers usrs = (DxcUsers) query.list().get(0);	
+					
+			if(userId.equalsIgnoreCase(usrs.getUserId()) && securityQuestion.equalsIgnoreCase(usrs.getSecurityQuestion()) && securityAnswer.equalsIgnoreCase(usrs.getSecurityAnswer()))
+				return "Successful!";	
+			}
+			catch (Exception e) {				
+				return "Invalid Credentials";
+			}
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return "Sorry something is wrong";
+		
+	}
+	
+	
+
+	
+	
+	public String changePass(String password, String userId)	{
+			
+			try	{
+				Session session=sessionFactor.getCurrentSession();
+
+				String hql="update DxcUsers u set u.password=:password where u.userId=:userId";
+				Query query= session.createQuery(hql);
+				query.setParameter("password", password);
+				query.setParameter("userId", userId);
+				
+				int res=query.executeUpdate();
+				
+
+				
+				if(res>0)				
+					return "Password changed successfully!";	
+				else
+					return "Password updation is unsuccessful";				
+				
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}	
+			return "Sorry something is wrong";
+					  
+		}
+
+--------------------------------------
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Sign Up Status</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="css/statusStyle.css" rel="stylesheet">
+
+</head>
+<body>
+
+
+ <div class="container">
+
+
+<form action="loginPage" class="form-group">
+	<p id="stts">${status}</p>
+<input type="submit" value="Sign Out" class="btn btn-danger btn-lg" id="sobtn">
+</form>
+
+</div>
+
+</div>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------
+
+
+
+
+<form action="changePassword" class="form-group">
+
+<% String usrId = request.getParameter("userId"); %>
+
+
+<table id="tblad">
+
+<tr><td>UserId:</td><td><input type="text" disabled="disabled" value="${userId}" name="usrIdShow" class="form-control"></td></tr>
+
+<input type="hidden" value="${userId}" name="usrId" class="form-control">
+  
+ 
+<tr><td>Password:</td><td><input type="text" name="password" class="form-control" required></td></tr>
+<tr><td>Confirm Password:</td><td><input type="text" name="cpassword" class="form-control" required></td></tr>
+
+<tr><td></td><td><input type="submit" value="Submit" class="btn btn-success btn-block"></td></tr>
+
+</table>
+</form>
+
+
+</div>
+
+</div>
+
+--------------------------------
+
+
+	<form action="fpassStatus" class="form-group">
+
+<table id="tblad">
+
+<tr><td>UserId: </td><td><input type="text" name="userId"  class="form-control"></td></tr>
+<tr><td>Security Question: </td>
+<td >
+<select name="securityQuestion"  class="btn btn-info">
+<div class="dropdown-menu">
+<option class="dropdown-item">Choose a security question</option>
+<option class="dropdown-item">What's your favorite place?</option>
+<option class="dropdown-item">What's your first pet's name?</option>
+<option class="dropdown-item">What's your first school name?</option>
+<option class="dropdown-item">What's your favorite color?</option>
+<option class="dropdown-item">What's your favorite animal?</option>
+<option class="dropdown-item">What's your favorite name?</option>
+<option class="dropdown-item">What's your favorite recipe?</option>
+</div>
+</select>
+</td>
+</tr>
+<tr><td>Security Answer:</td><td><input type="text" name="securityAnswer"  class="form-control"></td></tr>
+<tr><td></td><td><input type="submit" value="Validate" class="btn btn-success btn-block"></td></tr>
+
+
+</table>
+----------------------
+
+<div class="jumbotron">
+ <div class="container">
+<h2 id="lh">Login</h2>
+<form action="loginStatus" class="form-group">
+<table>
+<tr><td>UserId:</td> <td><input type="text" name="userId"  class="form-control"></td></tr>
+<tr><td>Password:</td> <td><input type="password" name="password"  class="form-control"></td></tr>
+<tr><td></td><td><input type="submit" value="login" class="btn btn-success btn-lg btn-block"></td></tr>
+</table>
+</form>
+--------------------
+
+
+<form action="fpassStatus" class="form-group">
+
+<table id="tblad">
+
+<tr><td>UserId: </td><td><input type="text" name="userId"  class="form-control"></td></tr>
+<tr><td>Security Question: </td>
+<td >
+<select name="securityQuestion"  class="btn btn-info">
+<div class="dropdown-menu">
+<option class="dropdown-item">Choose a security question</option>
+<option class="dropdown-item">What's your favorite place?</option>
+<option class="dropdown-item">What's your first pet's name?</option>
+<option class="dropdown-item">What's your first school name?</option>
+<option class="dropdown-item">What's your favorite color?</option>
+<option class="dropdown-item">What's your favorite animal?</option>
+<option class="dropdown-item">What's your favorite name?</option>
+<option class="dropdown-item">What's your favorite recipe?</option>
+</div>
+</select>
+</td>
+</tr>
+<tr><td>Security Answer:</td><td><input type="text" name="securityAnswer"  class="form-control"></td></tr>
+<tr><td></td><td><input type="submit" value="Validate" class="btn btn-success btn-block"></td></tr>
+
+
+</table>
+
+<% 
+String userId = request.getParameter("userId"); 
+session.setAttribute("userId",userId); 
+%>
+
+</form>
+
+</div>
+
+</div>
+
+-----------------------------------
+
+	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login Status</title>
+ 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="css/statusStyle.css" rel="stylesheet">
+
+</head>
+<body>
+
+<p id="ls">${status}</p>
+
+<form action="loginPage">
+<input type="submit" value="Logout" class="btn btn-danger" style="float:right">
+</form>
+
+</body>
+</html>
+
+---------------------------------
+
+
