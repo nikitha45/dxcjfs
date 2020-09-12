@@ -1,0 +1,50 @@
+
+
+Note : Task should be done the Industry way
+with all proper package names class name, method and variable names etc
+
+
+-> create a product Object with 6 properties
+
+Ex: productId , productName, productPrice etc
+
+(create relevant if required in db)
+
+-> write a function to create new products  and store it in db
+
+-> write a function to delete the given product from db based on the productId
+
+->write a function to display all products in the dbs
+
+
+------------------------------
+
+
+create table product(int pid primary key, pname varchar(20), int prod_price, prod_desc varchar(200), int ctg_id, int quantity);
+
+
+to get all tables>>
+select * from tab;
+
+-----------------------------------------------
+
+Packages 
+nd files:
+
+>>com.myproduct.dbutil
+DBConnection.java
+
+>>com.myproduct.model
+Product.java
+
+>>com.myproduct.dao
+ProductDao.java
+
+
+Main meth>>
+>>com.myproduct.service
+ProductService.java
+
+
+-----------------------------------------------
+

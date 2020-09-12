@@ -1,0 +1,75 @@
+
+
+
+
+-> create table Employee with the following attributes and constraints
+
+EmpFName
+EmpMName
+EmpLastName
+EmpAge -> must be a positive number and less than 50
+EmpCity -> should begin with letter B (Ex: Bangalore , Bijapur)
+EmpDesignation -> can be any manager (Ex sales manager, acc manager)
+EmpId -> primary key must have 5 chars (EX: emp01,emp02,emp03)
+empDOB -> must be a date(data type) column
+
+-> insert 5 employee details
+
+->update any employe and change city name
+
+-> delete an employee
+ 
+-> delete all employees
+
+->get back all the employees deleted in previous delete
+
+-> display employee  name and dob in(DD-MM-YYYY) fromat
+
+-> display employee  name in following format  
+       Fname   Mname    lname
+Ex:  Sachin  Ramesh  Tendulkar
+should be displayed as  S.R.Tendulkar  
+
+
+---------------------------------------------------
+
+
+create table Employee
+(
+EmpFName varchar(20),
+EmpMName varchar(20),
+EmpLastName varchar(20),
+EmpAge int check(EmpAge between 20 and 50),
+EmpCity varchar(20) check(EmpCity like 'B%'),
+EmpDesignation varchar(20) check(EmpDesignation like '% manager'),
+EmpId char(5) primary key check(EmpId like 'emp%'),
+EmpDOB date
+);
+
+
+insert into Employee values('Reena','Rinu','Ree',21,'Bangalore','Delivery manager','emp01','02-Aug-1998');
+insert into Employee values('Aastha','Ami','Agarwal',22,'Bijapu','Sales manager','emp02','03-Jan-1998');
+insert into Employee values('Mona','Neel','Rom',30,'B1','Acc manager','emp04','04-Mar-1998');
+insert into Employee values('Sana','Ari','Teena',25,'B2','abc manager','emp03','05-Jul-1998');
+insert into Employee values('Reetu','Teena','Foxy',23,'B3','xyz manager','emp05','07-Feb-1998');
+
+
+update Employee set EmpCity='Bnglr' where EmpId='emp03';
+
+
+delete from Employee where EmpId='emp05';
+
+commit;
+
+delete from Employee;
+
+rollback;
+
+select EmpFName,EmpMName,EmpLastName,EmpDOB from Employee;
+
+
+select SUBSTR(EmpFName,1,1) ||'.'||SUBSTR(EmpMName,1,1)||'.'||EmpLastName as Name from Employee where EmpId='emp01';
+
+
+
+

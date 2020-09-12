@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+$(function(){
+$("#btn1").click(
+	function(){ $("p").hide();
+	})
+
+
+$("#btn2").click(
+	function(){ $("p.abc").hide();
+	})	
+
+
+$("#btn3").click(
+	function(){ $(".abc").hide();
+	})	
+
+$("#btn3").click(
+	function(){ $("div").fadeIn("slow");
+	})	
+
+$("#mytxt").click(
+	function(){ $(this).animate({right:'300px'});
+	})
+
+
+// $("#mytxt").click(
+// 	function(){ $(this).css({"right":"700px"}).animate({"right":"0px"}, "slow");;
+// 	})
+
+
+
+$("p.abc").click(
+	function(){ $(this).css({
+		fontSize:"40px"
+
+		});
+	})	
+
+
+$("#btnshow").click(
+	function(){ $("p,div, .abc").show();
+	})
+
+
+$("#btntop").click(
+	function(){ $("#txt1").slideUp();
+	})
+
+
+$("#btndown").click(
+	function(){ $("#txt2").slideDown();
+	})
+
+$("#btntoggle").click(
+	function(){ $("#txt3").slideToggle("slow");
+	})
+
+
+
+})
+
+</script>
+</head>
+
+
+<body>
+
+<button id="btn1" type="submit">Button</button>
+<button id="btn2" type="submit">Button 2</button>
+<button id="btn3" type="submit">Button 3</button>
+
+
+
+<p>This is p1 tag </p>
+<p>This is p2 tag </p>
+<p>This is p3 tag </p>
+
+<p class="abc">This is p4 tag of class abc</p>
+
+
+<p class="abc">This is p tag of class abc</p>
+<h5 class="abc">This is h5 tag of class abc</h5>
+<!-- <div class="abc">This is div tag of class abc</div>
+ -->
+
+ <div class="abc">This is div tag of class abc</div>
+ <div>This is div tag of class abc</div>
+
+
+<div>This is div1 tag</div>
+<div>This is div2 tag</div>
+<div>This is div3 tag</div>
+
+
+<input type="text" id="mytxt">
+
+<p class="abc">This is p tag of class abc</p> <br><br>
+
+
+<button id="btnshow" type="button">Show</button> <br><br>
+
+
+<input type="text" id="txt1" style="margin-top: 100px;">
+<button id="btntop">Top</button> <br><br>
+<input type="text" id="txt2" style="margin-top: 100px;"> <button id="btndown">Down</button> <br><br>
+
+<input type="text" id="txt3" style="margin-top: 100px;"> <button id="btntoggle">Toggle btn</button> <br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

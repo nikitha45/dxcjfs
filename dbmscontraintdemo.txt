@@ -1,0 +1,156 @@
+
+
+
+primary key
+foreign key
+not null
+check
+default
+unique
+
+
+
+create table testdef
+(
+uname varchar(20),
+city varchar(20) default 'bang'
+)
+
+
+insert into testdef values('test name');
+//error not enough values
+
+
+insert into testdef values('test name','mum');
+
+insert into testdef values('test name',default);
+
+
+insert into testdef values('test name',null);
+
+insert into testdef values('test name','');
+
+
+select * from testdef
+where city is null;
+
+insert into testdef values('test name',' ');
+
+select * from testdef
+where city is null;
+
+
+
+insert into testdef(uname) values('new name');
+
+
+
+create table unqtest
+(
+uname varchar(20) unique,
+city varchar(20) default 'bang'
+);
+
+
+insert into unqtest values('aa','aa');
+
+
+insert into unqtest values('aa','mum');
+//error cannot insert duplicates
+
+insert into unqtest values('','mum');
+// null values inserted 
+
+
+insert into unqtest values('','mum');
+// multiple null values inserted 
+
+
+
+create table unqtest1
+(
+uname varchar(20) unique not null,
+city varchar(20) default 'bang'
+);
+
+insert into unqtest1 values('','mum');
+
+
+create table pktestMul
+(
+uname varchar(20) primary key,
+city varchar(20) primary key
+);
+
+
+create table uqtestMul
+(
+uname varchar(20) unique not null,
+city varchar(20) unique not null
+);
+
+
+primary key , alternate key , candidate key (ELECTION)
+
+pk 
+stud_id    ---         reg_no  --- App_form_No  --  contact_no  --   email
+
+
+
+
+
+pk -- > internally it creates an index
+
+
+dbms constraints (101) 
+
+
+
+column level constraint
+create table tabcon1
+(
+uname varchar(20) unique not null,
+city varchar(20) ,
+);
+------------------------------------------------
+table level constraint
+
+create table tabcon
+(
+uname varchar(20) not null,
+city varchar(20) ,
+constraint uq unique(uname) 
+);
+
+
+insert into tabcon values('','test');
+
+insert into tabcon values('aa','test');
+
+insert into tabcon values('aa','test');
+
+
+create table compPK
+(
+uname varchar(20) ,
+lastName varchar(20),
+contactNo int ,
+address varchar(20),
+constraint pkk primary key(uname,contactno)
+)
+
+
+uname  cno add 
+raj           101  test
+raj           102  test
+ram         101
+ram         102
+raj           103
+raj           104 
+raj           105
+raj            101 -- invalid
+
+
+
+
+

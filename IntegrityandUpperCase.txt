@@ -1,0 +1,118 @@
+
+
+
+chk contraint and intrgty and upper case
+
+
+Types of integrity:
+
+entity integrty: ensures table is uniquely identified
+(primary key)
+
+refrntnl intgrty: 
+ensures rfrnced column derives data from its parent   (foreign key)
+
+
+domain intgrty:
+ ensures values are in given range
+-> check constraint 
+age - (20 -60)
+city = "hyd","bang","mum"
+
+
+
+
+create table empChk
+(
+empid int,
+age int check (age between 20 and 60),
+empName varchar(20)
+);
+
+insert into empchk(age) values(10);
+
+insert into empchk(age) values(25);
+
+insert into empchk(age) values(20);
+
+
+create table userTab
+(
+uname varchar(20),
+pass varchar(20)
+);
+
+
+insert into usertab values('raj','pass');
+
+
+insert into usertab values('raja','pass');
+
+insert into usertab values('ram','pass');
+
+
+select * from usertab
+where uname='raj';
+
+
+select * from usertab
+where uname='Raj';
+
+
+SELECT * from USERtab
+where uNAME='raj';
+
+
+search box=  raj
+
+search box=  Raj -- no recs found
+
+search box=  RAJ -- no recs found
+
+samantha
+
+search box- Samantha
+no recs found
+
+
+
+select upper(uname) from 
+usertab;
+
+select upper('this is my data') from 
+dual;
+
+select * from usertab
+where upper(uname)='RAJ';
+
+
+select upper(uname) from usertab;
+
+
+
+
+
+select * from usertab
+where upper(uname);
+
+RAJ
+RAJA
+RAM
+
+select upper('raj') from 
+dual;
+
+select upper('Raj') from 
+dual;
+
+select * from usertab
+where upper(uname)=upper('Raj');
+
+
+select * from usertab
+where upper(uname)=upper('RaJ');
+
+
+select upper(uname) ,pass from usertab
+where upper(uname)=upper('RaJ');
+

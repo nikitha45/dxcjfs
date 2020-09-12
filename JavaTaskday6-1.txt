@@ -1,0 +1,23 @@
+
+
+//task for the day part 1
+
+
+int sum(int... x){
+System.out.println("sum meth "+x[6]);
+return 10;
+} // return the total sum of the args
+// print the max value
+// print the min
+// print no of ODD and even digits
+//print count numbers div by 3
+
+--------------------------------
+
+VarArgsDemo.java
+
+
+
+
+
+-----------------------------------------------------------------------------

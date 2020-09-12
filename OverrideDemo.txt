@@ -1,0 +1,105 @@
+
+
+
+
+//over riding : modifying parents behaviour
+
+// no of args ,type n seq must be same
+// return type must be same
+// access spcfr -> must be same or higher
+
+//public
+//protected
+//default
+//private
+
+class Animal{
+private  void move(){
+System.out.println("Animal Move");
+}
+}
+class Tiger extends Animal{
+
+public void move(){
+System.out.println("Tiger Move");
+}
+
+}
+
+public class MainInhrt {
+public static void main(String[] args) {
+Tiger t=new Tiger();
+t.move();
+}
+}
+
+
+
+---------------------------------------------------------
+
+
+class Animal{
+ void move(){
+System.out.println("Animal Move");
+}
+}
+class Tiger extends Animal{
+
+@Override
+public void move(){
+System.out.println("Tiger Move");
+}
+
+}
+
+public class MainInhrt {
+public static void main(String[] args) {
+Tiger t=new Tiger();
+t.move();
+}
+}
+
+-----------------------------------------
+
+
+class Animal{
+public  void move(){
+System.out.println("Animal Move");
+}
+}
+class Tiger extends Animal{
+
+
+void move(){
+System.out.println("Tiger Move");
+}
+
+}
+
+public class MainInhrt {
+public static void main(String[] args) {
+Tiger t=new Tiger();
+t.move();
+}
+}
+
+------------------------
+
+class Animal{
+public  void move(){
+System.out.println("Animal Move");
+}
+}
+class Tiger extends Animal{
+
+
+public int move(){
+System.out.println("Tiger Move");
+retrun 0;
+}
+
+}
+
+
+
+

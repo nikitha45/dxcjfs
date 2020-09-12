@@ -1,0 +1,48 @@
+
+
+
+task for those who completed the previous one.. those who didnot complete the previous one must complete it first and continue with this
+
+create a java function to reverse a given string.
+
+create a java function to validate a given string.
+has only digits or not
+
+create a java function to validate a given string.
+has 10 digits or not
+
+create a java function to sort an int array in assesding order
+
+
+
+
+------------------------------------------------------------------------
+
+
+
+JavaTask7.java
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

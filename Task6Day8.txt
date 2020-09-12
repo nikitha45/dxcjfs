@@ -1,0 +1,43 @@
+
+
+
+-> create table called stock and sales with 5 columns each identify and mark one of the column as primary key and one as foreign key
+
+
+tasks using select 
+(HINT: use date functions in oracle)
+for details on date functions in oracle refer to oracle docs or google
+
+
+ ->display current date and time
+
+-> display current date
+
+-> display current date in DD/MM/YYYY format
+
+->display current day as Tuesday
+
+-> display date after 10 days from the current date
+
+
+
+
+------------------------------------------------------------------------
+
+
+1. select CURRENT_TIMESTAMP FROM dual;
+
+2. select sysdate from dual;
+
+3. select TO_CHAR(SYSDATE,'DD/MM/YYYY') FROM DUAL;
+//select to_char(sysdate,'DD-MM-YYYY'), TO_CHAR(SYSDATE,'DD/MM/YYYY') FROM DUAL;
+
+4. select to_char(sysdate,'Day') from dual;
+
+5. select TO_CHAR(SYSDATE+10,'DD/MM/YYYY') FROM DUAL;
+
+
+------------------------------
+
+
+//select to_char(date'2018-01-01', 'DAY') from dual;

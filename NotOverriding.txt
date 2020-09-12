@@ -1,0 +1,42 @@
+
+
+
+
+//over riding : modifying parents behaviour
+
+// no of args ,type n seq must be same
+// return type must be same
+// access spcfr -> must be same or higher
+
+//public
+//protected
+//default
+//private
+
+class Animal{
+public  void move(){
+System.out.println("Animal Move");
+}
+
+}
+class Tiger extends Animal{
+
+
+public void move(int x){
+  System.out.println("tiger Move");
+  }
+ 
+}
+
+public class MainInhrt {
+public static void main(String[] args) {
+Tiger t=new Tiger();
+t.move();
+t.move(10);
+}
+}
+
+
+
+
+

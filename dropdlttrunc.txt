@@ -1,0 +1,182 @@
+
+
+
+
+
+
+drop delete n truncate:
+
+dml -> insert ,update,delete , merge
+
+ddl -> create , drop , alter ,truncate
+
+dql -> select
+dcl ->grant / revoke 
+save, commit, rollback
+
+
+
+create table testdrop
+(
+username varchar(20)
+);
+
+
+insert into testdrop values('aa');
+
+insert into testdrop values('aa');
+insert into testdrop values('aa');
+
+
+drop table testdrop;
+
+select * from testdrop;
+//table or view not found
+
+-----------------------
+
+
+create table testdrop
+(
+username varchar(20)
+);
+
+
+insert into testdrop values('aa');
+
+insert into testdrop values('aa');
+insert into testdrop values('aa');
+
+delete from testdrop;
+
+select * from testdrop;
+//no recs found but table exist
+
+-------------------------------------------------------------
+
+create table testtrunc
+(
+username varchar(20)
+);
+
+insert into testtrunc values('aa');
+insert into testtrunc values('aa');
+insert into testtrunc values('aa');
+
+select * from testtrunc;
+
+truncate table testtrunc;
+
+select * from testtrunc;
+// recs not found  but table exist
+
+
+delete vs--trubcate
+
+insert into testtrunc values('aa');
+insert into testtrunc values('ab');
+insert into testtrunc values('ac');
+
+delete from testtrunc 
+where username='aa';
+// 1 row deleted
+
+select * from testtrunc;
+
+
+truncate table testtrunc
+where username='ab';
+// truncate cannot delete specific rec
+
+
+------------------------------------------------------------------------------
+
+select * from testtrunc;
+
+commit;
+
+delete from testtrunc;
+
+select * from testtrunc;
+
+rollback;
+//undo -- goes to last commit;
+
+--------------------------
+
+select * from testtrunc;
+
+commit;
+
+truncate table testtrunc;
+
+select * from testtrunc;
+
+rollback;
+//undo -- goes to last commit;
+
+select * from testtrunc;
+
+
+--> deleted values can be rolledback
+--->truncated values cannot be rolledback 
+
+-----------------------------------------------------
+
+create table parent
+(
+uname varchar(20) primary key,
+pass varchar(20)
+);
+
+create table child
+(
+uname varchar(20) references parent(uname),
+pass varchar(20)
+);
+
+
+insert into parent values('raj','sad');
+insert into parent values('ram','sad');
+
+insert into child values('raj','sad');
+insert into child values('raj','sad');
+
+select * from parent;
+
+select * from child;
+
+delete from parent 
+where uname='raj';
+
+delete from parent 
+where uname='ram';
+
+
+delete from child;
+
+delete from parent;
+
+------------------------------------
+
+insert into parent values('raj','sad');
+insert into parent values('ram','sad');
+
+
+select * from parent;
+
+select * from child;
+
+truncate table parent;
+// pk of this table is refered by some othr table
+
+delete from parent;
+// deletes d recs .. coz child doesnt refer d parent date (child recs not found)
+
+
+
+
+
+
+
+

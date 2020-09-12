@@ -1,0 +1,98 @@
+
+
+
+
+create table testconsttab
+(
+user_id int,
+uname varchar(20),
+constraint pk_tt primary key(user_id)
+)
+
+
+create table testconsttab
+(
+user_id int,
+uname varchar(20),
+constraint pk_tc primary key(user_id)
+)
+
+insert into testconsttab values(1,'test');
+
+insert into testconsttab values(1,'test');
+//error pk should be unique
+
+
+alter table testconsttab
+drop constraint pk_tc;
+
+insert into testconsttab values(1,'test');
+
+
+
+create table colconst
+(
+user_id int primary key,
+uname varchar(20)
+);
+
+
+insert into colconst values(1,'dd');
+
+insert into colconst values(1,'dd');
+// duplicate pk value
+
+error -> SYS_c008053
+
+
+desc user_constraints;
+
+select constraint_name,constraint_type,table_name
+from user_constraints;
+
+select constraint_name,constraint_type,table_name
+from user_constraints 
+where table_name='colconst';
+
+
+
+
+select constraint_name,constraint_type,table_name
+from user_constraints 
+where table_name=upper('colconst');
+
+
+alter table colconst
+drop constraint SYS_C008053;
+
+
+
+create table changetype
+(
+uname varchar(20),
+pass varchar(20)
+)
+
+
+alter table changeType
+modify pass int; 
+
+
+insert into changetype values('aaa','aass')
+
+desc changetype;
+
+
+
+insert into changetype values('aaa','1');
+//data stored
+
+
+alter table changeType
+modify pass varchar(20); 
+
+// column to be modified must be empty to change datatype
+
+
+
+

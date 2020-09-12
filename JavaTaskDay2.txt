@@ -1,0 +1,53 @@
+
+
+
+
+Java day 2 task:
+
+
+-> write a java program to accept 2 values from c,d line and concat them
+
+-> write a java program to accept to number from cmd line and add the numbers
+
+-> create a java program to check if the character is in small case or capital case
+
+-> create a java program to check the number entered by user is odd or even 
+
+-> create a java program to convert the given dollar into rupees 
+
+
+-> write a java program to accept 2 cmd line args
+and display the output in the following format
+
+Example 1.
+args1-> DXC  
+args2-> JAVA
+
+output -> welcome to JAVA training @ DXC
+
+Example 2.
+args1-> NIIT  
+args2-> PYTHON
+
+output -> welcome to PYTHON training @ NIIT
+
+Example 3.
+args1-> HP  
+args2-> CCNA
+
+output -> welcome to CCNA training @ HP
+
+
+-> create a class employee with 5 attributes of different types 
+     a) write a init method to initilize all the                     attributes
+     b) write a method displayEmploye to print all employee details
+     
+   c)create multiple objects of the employee , initilize and display details of multiple employees
+
+
+
+
+
+
+
+

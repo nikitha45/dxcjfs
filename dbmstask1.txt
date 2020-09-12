@@ -1,0 +1,53 @@
+
+
+
+create table TimeTable(
+Day varchar(20), 
+SessionNum number, 
+RoomNum varchar(20), 
+Faculty varchar(30), 
+Sem number, 
+Subject varchar(30),
+constraint cnst1 unique(day,sessionnum,roomnum),
+constraint cnst2 unique(day,sessionnum,faculty),
+constraint cnst3 unique(day,sessionnum,sem),
+constraint cnst4 unique(day,sessionnum,sem,subject),
+constraint cnst5 unique(day,sessionnum,roomnum,faculty),
+constraint cnst6 unique(day,sessionnum,roomnum,sem),
+constraint cnst7 unique(day,sessionnum,roomnum,subject),
+constraint cnst8 unique(day,sessionnum,roomnum,faculty,sem),
+constraint cnst9 unique(day,sessionnum,roomnum,faculty,subject),
+constraint cnst10 unique(day,sessionnum,roomnum,faculty,sem,subject)
+);
+
+
+
+insert into timetable values('mon',1,'r1','raj',1,'java');
+//insert into timetable values('mon',1,'r1','john',5,'dbms');
+insert into timetable values('mon',1,'r2','raj',1,'java');
+insert into timetable values('mon',1,'r3','Reena',1,'dbms');
+
+---------------------------------------------------------------------
+
+
+ create table TimeTable1(
+  2  Day varchar(20),
+  3  SessionNum number,
+  4  RoomNum varchar(20),
+  5  Faculty varchar(30),
+  6  Sem number,
+  7  Subject varchar(30),
+  8  constraint cnst11 unique(day,sessionnum,roomnum),
+  9  constraint cnst12 unique(day,sessionnum,faculty),
+ 10  constraint cnst13 unique(day,sessionnum,sem));
+
+
+
+
+//insert into timetable1 values('mon',1,'r1','john',5,'dbms');
+insert into timetable1 values('mon',1,'r2','raj',1,'java');
+insert into timetable1 values('mon',1,'r3','Reena',1,'dbms');
+
+-----------------------------------------------------------------------
+
+//alter table timetable add constraint cnst2 unique(day,sessionnum,faculty);

@@ -1,0 +1,32 @@
+
+
+
+How to create a fk out of composite pk:
+
+create table compk
+(
+c1 varchar(20),
+c2 varchar(20),
+c3 varchar(20),
+constraint pk_comp primary key(c1,c2)
+);
+
+create table comfk
+(
+c1 varchar(20),
+c2 varchar(20),
+c3 varchar(20),
+constraint fk_comp foreign key(c1,c2) references compk(c1,c2) 
+);
+
+
+create table comfk2
+(
+c1 varchar(20),
+c2 varchar(20),
+c3 varchar(20)
+);
+
+
+alter table comfk2
+add constraint fk_comp2 foreign key(c1,c2) references compk(c1,c2); 

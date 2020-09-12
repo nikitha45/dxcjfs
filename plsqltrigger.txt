@@ -1,0 +1,201 @@
+
+
+
+
+pl sql trigger and sql update:
+
+
+
+insert into parent values('test user','pass');
+
+insert into parent values('test user1','pass1');
+
+insert into parent values('test user2','pass2');
+
+
+update parent set pass='new pass' 
+where uname='ram';
+
+update parent set pass='my pass' , uname='rama'
+where uname='ram';
+
+
+update parent set pass='my pass new'
+ where uname='rama' or uname='raj';
+
+
+-- change clg 122 to IIT from null
+
+update clg set cname='IIT' 
+where cid='122';
+
+
+update stud set cid='122'
+where sid='3';
+
+
+alter table clg
+add No_Of_Stud int default 0;
+
+
+trigger
+
+
+create table testtrg
+(
+uname varchar(20)
+)
+
+create trigger trgdemo
+after insert
+on testtrg
+begin
+dbms_output.put_line('trigger executed');
+end;
+/
+
+insert into testtrg values('test');
+
+
+set serveroutput on
+
+:new -> inserted values
+:old -> deleted values
+
+create or replace trigger trgdemo
+after insert
+on testtrg
+begin
+dbms_output.put_line('trigger executed '+:new.uname);
+end;
+/
+
+//error old or new ref cannot be used in table level trg
+
+
+create or replace trigger trgdemo
+after insert
+on testtrg
+for each row
+begin
+dbms_output.put_line('trigger executed '+:new.uname);
+end;
+/
+
+insert into testtrg values('JOHN CENA');
+
+
+error // the concat opr in pl sql is not + it is ||
+
+
+
+create or replace trigger trgdemo
+after insert
+on testtrg
+for each row
+begin
+dbms_output.put_line('trigger executed '|| :new.uname);
+end;
+/
+
+
+insert into testtrg values('JOHN CENA');
+
+
+--- tab
+c
+d
+
+bin
+a
+b
+
+
+create table users
+(
+uname varchar(20),
+user_id varchar(20)
+);
+
+
+create table users_bin
+(
+uname varchar(20),
+user_id varchar(20)
+);
+
+insert into users values('ram','ram@test');
+insert into users values('raj','raj@test');
+insert into users values('rama','rama@test');
+insert into users values('raja','raja@test');
+
+create trigger trgBin
+after delete 
+on users
+for each row 
+begin
+insert into users_bin values(:old.uname,:old.user_id);
+end;
+/
+
+
+---------------------------
+customer
+cid cname
+101  john
+
+
+customer_backup 
+cid cname
+101 john
+
+-------
+
+create table customer
+(
+cid int,
+cname varchar(20)
+);
+
+create table customer_backup
+(
+cid int,
+cname varchar(20)
+);
+
+
+create trigger trgBackup
+after insert
+on customer
+for each row
+begin
+insert into customer_backup values(:new.cid,:new.cname);
+end;
+/
+
+
+insert into customer values(101,"John");
+
+insert into customer values(102,"Reena");
+
+-----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

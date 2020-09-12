@@ -1,0 +1,59 @@
+
+
+1.
+create a function to find the first 
+char in a given string 
+and replace it with the given char and return the result
+
+signature: String replaceFirst(String var,char find , char replace)
+
+
+
+2.
+create a function to find the last 
+char in a given string 
+and replace it with the given char and return the result
+
+signature: String replaceLast(String var,char find , char replace)
+
+
+
+3.
+create a function the checks the 2 given chars are 
+same or not irrespective of their case
+if same return true
+else false
+
+signature: (guess) myEquals(guess ? , guess ?)
+
+
+Ex:
+input : a A
+output ->true
+
+input : a a
+output ->true
+
+input : A A
+output ->true
+
+input : A a
+output ->true
+
+input : b A
+output ->false
+
+----------------------------------------------------------------
+
+Eclipse files:
+
+1. MyReplaceFirst.java
+
+2. MyReplaceLast.java
+
+3. CharEqual.java
+
+------------------------------------
+
+
+

@@ -1,0 +1,110 @@
+
+
+create table stock
+(
+itemId int primary key,
+itemName varchar(20)
+);
+
+create table sales
+(
+itemNumber int references stock(itemid),
+salesDate date
+);
+
+
+insert into sales values('101','01-jan-2020');
+
+
+create table stock1
+(
+itemId int primary key,
+itemName varchar(20)
+);
+
+create table sales1
+(
+itemId varchar(20) references stock(itemid),
+salesDate date
+);
+
+//error data type of referenced column shoud match thr parent key(column)
+
+
+
+insert into sales values(null,'01-01-2020');
+error date format doesn't match 
+
+
+insert into sales values(null,to_date('01-01-2020','dd-mm-yyyy'));
+
+
+create table customer
+(
+cust_id int primary key,
+cust_name varchar(20),
+contact_no int not null
+);
+
+insert into customer values(20,null,null);
+//error cust_number cannot be null
+
+insert into customer values(20,null,'987');
+
+create table customer1
+(
+cust_id int primary key,
+cust_name varchar(20),
+contact_no int not null,
+address varchar(50),
+ref_id varchar(50),
+cust_area varchar(20)
+);
+
+
+insert into customer1 values(60,null,998877,null,null,null);
+
+
+insert into customer1(cust_id,contact_no)
+values(40,55555);
+
+
+insert into customer1(cust_id,contact_no,cust_name)
+values(30,6666,'RAJ');
+
+//ensure all not null cols are included in list
+
+
+insert into customer1(cust_id,cust_name)
+values(3,'RAM');
+
+select * from customer1;
+
+
+
+//display all customer who has name
+
+select * from customer1 
+where cust_name is not null;
+
+//display cust_name and id  with id > 35
+
+select cust_name,cust_id 
+from customer1
+where cust_id  > 35;
+
+
+select contact_no,cust_id 
+from customer1
+where cust_id  > 35;
+
+//display cust details with id 30
+
+select * from customer1
+where cust_id=30;
+
+
+
+
+
+

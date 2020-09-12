@@ -1,0 +1,55 @@
+
+//abstract class demo1
+
+package com.myapp.pack1;
+// cannot create obj of abs class
+// abs meth cannot be wrtn in non abs class
+//abs class can contain 0 or more abs methods
+
+//abs methods of parent must be overridden by child or child should be marked as abstract
+
+ abstract public class Animal {
+
+public abstract void move();
+
+public void eat()
+{
+
+}
+}
+
+------------------------------------------------
+
+package com.myapp.pack1;
+
+public  class Tiger extends Animal{
+
+@Override
+public void move() {
+// TODO Auto-generated method stub
+
+}
+
+
+}
+
+-----------------------
+
+package com.myapp.pack1;
+
+public class MainInhrt {
+
+public static void main(String[] args) {
+
+//Animal a=new Animal();
+
+Tiger t=new Tiger();
+t.move();
+}
+
+}
+
+
+
+
+

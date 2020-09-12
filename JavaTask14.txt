@@ -1,0 +1,97 @@
+
+
+
+->  create table for player
+   -> with 6 properties
+ 
+->dob
+player id
+player fname
+player lname
+decide other 2 by yourself
+
+create a sequence to generate number from  1 -100
+
+---------------------
+
+write a jdbc application to create , update , delete, getAllPlayers   and getplayer by name..
+
+
+while create a player player id is first 2 chars of fname of the player
+first 2 chars of lname of the player and an auto generated seq num from the data base
+
+Ex: Virat Kohli
+player id: ViKo001
+
+Rohit Sharma
+player id: RoSh002
+
+---------------------------------------------------------------------
+
+
+create table player(playerId int, player_fname varchar(20), player_lname varchar(20), player_dob Date, player_country varchar(20), teamId int); 
+
+
+
+sequence -auto generated number
+
+
+create sequence MySeq
+start with 1
+increment by 1;
+
+
+select myseq.nextVal from dual;
+
+
+select myseq.currVal from dual;
+
+create table testseq
+(
+test int
+);
+
+
+insert into testseq values(myseq.nextval);
+
+insert into testseq values(6);
+
+insert into testseq values(7);
+
+nextval -> 6
+
+delete from testseq
+where test=myseq.nextval;
+
+-------------------------------
+
+
+
+create sequence MySeq
+start with 1
+increment by 1;
+
+
+select myseq.nextVal from dual;
+
+
+select myseq.currVal from dual;
+
+create table testseq
+(
+test int
+);
+
+
+insert into testseq values(myseq.currval);
+forloop
+insert into testseq values(myseq.nextval);
+insert into testseq values(myseq.nextval);
+
+-----------------------------------------------------
+
+
+
+
+
+

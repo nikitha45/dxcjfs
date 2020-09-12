@@ -1,0 +1,42 @@
+
+PLSQL - Triggers Task
+
+
+Qus:
+customer
+cid cname
+101  john
+
+
+customer_backup 
+cid cname
+101 john
+---------------
+
+
+create table customer
+(
+cid int,
+cname varchar(20)
+);
+
+create table customer_backup
+(
+cid int,
+cname varchar(20)
+);
+
+
+create trigger trgBackup
+after insert
+on customer
+for each row
+begin
+insert into customer_backup values(:new.cid,:new.cname);
+end;
+/
+
+
+insert into customer values(101,"John");
+
+insert into customer values(102,"Reena");

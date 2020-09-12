@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+
+<style type="text/css">
+
+.form-group.required .control-label:after {
+  content: "*";
+  color: red;
+}
+
+
+body {
+    background: linear-gradient(to right, #33ccff 0%, #ff99cc 100%);
+}
+
+
+
+	
+</style>
+
+
+
+<script type="text/javascript">
+
+
+
+
+function confPass()
+{
+	// if(document.getElementById("pwd").value==document.getElementById("confpwd").value)
+	// {
+	// 	document.getElementById("sbmt").disabled=false;
+	// }
+	// else
+	// {
+	// 	document.getElementById("ptxt").innerHTML="Passwords must match";
+	// 	document.getElementById("sbmt").disabled=true;
+	// }
+
+	if(document.getElementById("pwd").value != document.getElementById("confpwd").value)
+	{
+			document.getElementById("ptxt").innerHTML="Passwords must match!";
+			document.getElementById('confpwd').style.color = 'red';
+			return false;
+	}
+	else
+	{	
+		document.getElementById('confpwd').style.color = 'green';
+		document.getElementById("ptxt").innerHTML="";
+		return true;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+types=["Graduation","Post Graduation"];
+
+
+function grad()
+{
+var typeDD=document.getElementById('type');
+for(i=0;i<types.length;i++)
+{
+var ele=document.createElement('option');
+ele.text=types[i];
+typeDD.add(ele,i+1)
+}
+}
+
+
+data=[['Computer Science Engineering' , 'Electronic engineering' , 'Bachelor of Arts'],['Masters in arts', 'Mtech computer science']];
+
+function gradData()
+{
+var typeDDN=document.getElementById('type');
+var selectedIdx= typeDDN.selectedIndex;
+console.log(selectedIdx);
+var dataDD=document.getElementById('dd');
+dataDD.innerText=null;
+for(i=0;i<data[selectedIdx-1].length;i++)
+{
+var ele=document.createElement('option');
+ele.text=data[selectedIdx-1][i];
+dataDD.add(ele,i+1)
+}
+}
+
+
+
+
+
+
+
+function alpha(e)
+{
+	if(!((e.which>=65 && e.which<=90) || (e.which>=97 && e.which<=122)))
+	{
+		e.preventDefault();
+	}
+}
+
+
+
+</script>
+
+</head>
+
+
+
+
+
+<body onload="grad()">
+
+
+<form style="margin-left: 450px; margin-top: 30px;">
+	<h3>Employee Registration Form</h3>
+	<div class="form-group required">
+    <label for="name" class="control-label">Name</label>
+    <input type="text" class="form-control col-md-3" id="ename" placeholder="Enter name" onkeypress="alpha(event)" required>
+ 	 </div>
+
+    <div class="form-group required">
+    <label for="pwd" class="control-label">Password</label>
+    <input type="password" class="form-control col-md-3" id="pwd" placeholder="Password" required>
+ 	</div> 	
+
+    <div class="form-group required">
+    <label for="confpwd" class="control-label">Confirm Password</label>
+    <input type="password" class="form-control col-md-3" id="confpwd" placeholder="Confirm Password" onkeyup="confPass()" required>
+  	</div>
+
+  	<p id="ptxt"> </p>
+
+<br>
+
+
+	<div class="form-group required">
+
+	<select class="btn btn-secondary dropdown-toggle" id="type" onchange="gradData()" required>
+			<option>Select type</option>		
+	</select>
+
+	<select class="btn btn-secondary dropdown-toggle" id="dd">
+	<option>select</option>
+	</select>
+	<label for="gradtype" class="control-label"> </label> 
+	</div>
+
+
+<br>
+
+	<div class="form-group required">
+	<label for="dob" class="control-label">Date of Birth</label> 
+	<input type="date" name="dob" id="dob" max="2002-08-03" required>
+	</div>
+
+
+<br>
+
+
+  	<button type="submit" id="sbmt" class="btn btn-success">Submit</button>
+
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

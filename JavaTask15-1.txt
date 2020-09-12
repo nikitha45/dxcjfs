@@ -1,0 +1,26 @@
+
+
+
+-> get all products from db and display it on a jsp page
+-> implement the functionality to delete the product in db 
+
+--> create a design page to delete where user will enter product id .. 
+and that product should be deleted from the db
+
+----------------------------
+
+html file:
+deleteProduct.html
+
+Servlet:
+DeleteProduct.java
+
+---
+package com.myserv.dao
+java class:
+ProductDao.java
+>> deleteProducts() method
+---------
+
+
+

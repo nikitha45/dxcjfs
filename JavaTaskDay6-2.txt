@@ -1,0 +1,158 @@
+
+
+
+->create a java function same as subStr function to extract string from a given string
+
+signature and exmaple
+
+//1
+String mySubStr(String data,int index)
+{
+}
+substract the string from the given position considering string chars from position 1 and
+return modified strng;
+
+ex:input  ->  HELLO , 1
+output -> ELLO
+
+input : hello world , 3
+output->lo world
+
+
+
+-> overload the above method and take 3 args
+1->string to be modified
+2-> start pos
+3-> no of elements to substract
+
+
+Ex:
+input ->  Hello World , 2 , 3
+output-> He World
+
+
+Ex:
+input ->  Hello World , 1 , 4
+output-> H World
+
+
+Ex:
+input ->  Hello World , 4 , 3
+output-> HelWorld
+
+
+
+
+->create a java function that counts repeated num of chars in a given string and prints the char
+
+Ex:
+input: Hello
+output-> 2 l
+
+input: Hello  world
+output-> 3 l
+
+input: this is test
+output 3 t
+
+--------------------------------------------------------------
+
+
+MySubstring.java
+
+----------------------------------------------------------------------------------
+
+
+
+
+
+public class MySubstring {
+	
+	String mySubStr(String data,int index)
+	{
+		int i;
+		String a="";
+		char[] arr = data.toCharArray();
+		
+		for(i=index;i<data.length();i++)
+		{
+			a=a+arr[i];
+		}
+		String newStr=new String(a);
+		return newStr;
+	}
+	
+	
+	
+	String mySubStr(String data,int index,int subele)
+	{
+		int i;
+		String b="";
+		char[] arr = data.toCharArray();
+		//hello world 2,4
+		for(i=0;i<data.length();i++)	{
+			if(i>=index && i<=(index+subele-1)) {
+				continue;
+			}
+			else
+				b=b+arr[i];		
+		}	
+		String newStr=new String(b);
+		return newStr;
+		
+		
+		//getting subtring from index 2 to 4
+//		for(i=index;i<data.length()-(index+subele)-1;i++)	{
+//			b=b+arr[i];  }
+			
+	}
+	
+	
+	public void CharCount(String str) {
+		int cnt=0,cnt1=0;
+		char c=' ';
+		char b=' ';
+		char[] ch=str.toCharArray();
+		//hello
+		for(int i=0;i<str.length();i++)	{ 
+			cnt=0;
+			for(int j=0;j<str.length()-i;j++)  {
+				if(ch[i]==ch[i+j])		{
+					cnt++;
+					c=ch[i];			
+				}
+			}
+			if(cnt1<cnt) {
+				cnt1=cnt;
+				b=c;	
+			}					
+		}
+		
+		System.out.println(cnt1+" "+b);
+	}
+	
+	
+	
+
+	public static void main(String[] args) {
+		
+		MySubstring ms = new MySubstring();
+		String str = ms.mySubStr("hello", 1);
+		System.out.println(str);
+		String str1 = ms.mySubStr("hello world", 2, 4);
+		System.out.println(str1);
+//		int n = ms.CharCount("hello world");
+//		System.out.println(n);
+		ms.CharCount("Hello worldddddd");
+	}
+
+}
+
+
+
+
+
+
+
+
+

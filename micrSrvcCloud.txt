@@ -1,0 +1,217 @@
+
+
+//Code for publishing a microservice on cloud
+
+
+--- Eureka Serverapplication.properties
+package com.dxcfs.eurekademo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
+@EnableEurekaServer
+@SpringBootApplication
+public class DxcfsEurekaApplication {
+
+public static void main(String[] args) {
+SpringApplication.run(DxcfsEurekaApplication.class, args);
+}
+
+}
+
+----------------------------------application.properties
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+
+
+------------------------------------------- eureka client pub
+
+main class
+
+
+package com.eurekaclient.pub;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+
+@EnableEurekaClient
+@SpringBootApplication
+public class MyDxcfsEurekaclientpubApplication {
+
+public static void main(String[] args) {
+SpringApplication.run(MyDxcfsEurekaclientpubApplication.class, args);
+}
+
+}
+
+---------------------------- controller
+package com.eurekaclient.pub.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.eurekaclient.pub.model.Employee;
+
+@RestController
+public class PublisherController {
+
+@RequestMapping(value="/getemployee")
+public Employee getEmployee()
+{
+return new Employee("Vinod", 5000);
+}
+
+
+
+}
+
+------------------- model/bean class
+package com.eurekaclient.pub.model;
+
+public class Employee {
+
+String empName;
+public int getEmpSalary() {
+return empSalary;
+}
+
+public void setEmpSalary(int empSalary) {
+this.empSalary = empSalary;
+}
+int empSalary;
+public Employee() {
+// TODO Auto-generated constructor stub
+}
+
+@Override
+public String toString() {
+return "Employee [empName=" + empName + ", empSalary=" + empSalary + "]";
+}
+
+
+
+public Employee(String empName, int empSalary) {
+super();
+this.empName = empName;
+this.empSalary = empSalary;
+}
+public String getEmpName() {
+return empName;
+}
+public void setEmpName(String empName) {
+this.empName = empName;
+}
+
+}
+
+--------------------------------------------------application.properties
+server.port=1111
+spring.application.name=pub
+
+
+---------------------------eureka client subscriber
+
+package com.dxcfs.eurekasub;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
+
+@EnableEurekaClient
+@SpringBootApplication
+public class MyDxcfsEurekaclientsubApplication {
+
+public static void main(String[] args) {
+SpringApplication.run(MyDxcfsEurekaclientsubApplication.class, args);
+}
+@LoadBalanced
+@Bean
+public RestTemplate getRest()
+{
+return new RestTemplate();
+}
+
+}
+
+
+-------------------controller
+
+package com.dxcfs.eurekasub;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import com.dxcfs.eurekasub.model.Employee;
+
+@RestController
+public class SubscriberController {
+
+@Autowired
+RestTemplate restTemplate;
+
+@RequestMapping("/getemp")
+public Employee getEmployee()
+{
+Employee employee= restTemplate.getForObject("http://pub/getemployee",Employee.class);
+return employee;
+}
+}
+
+
+------------------------------------bean/model
+
+package com.dxcfs.eurekasub.model;
+
+public class Employee {
+
+String empName;
+int empSalary;
+public Employee() {
+// TODO Auto-generated constructor stub
+}
+
+@Override
+public String toString() {
+return "Employee [empName=" + empName + ", empSalary=" + empSalary + "]";
+}
+
+
+
+public Employee(String empName, int empSalary) {
+super();
+this.empName = empName;
+this.empSalary = empSalary;
+}
+public String getEmpName() {
+return empName;
+}
+public void setEmpName(String empName) {
+this.empName = empName;
+}
+
+public int getEmpSalary() {
+return empSalary;
+}
+
+public void setEmpSalary(int empSalary) {
+this.empSalary = empSalary;
+}
+
+}
+
+---------------application.properties
+server.port=2222
+spring.application.name=sub
+
+
+
+
+

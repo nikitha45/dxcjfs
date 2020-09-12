@@ -1,0 +1,40 @@
+
+
+
+Note : do not use any built in functions
+
+-> write a java program to print the table of given num 
+Ex : input 2
+output 
+ 2 x 1= 2
+ 2 x 2= 4
+ 2 x 3= 6 and so on till 2 x 10 =20
+
+
+-> write a java program which loops for 26 times and print A-Z 
+
+output :-> A ,B ,C,D,E ........ till Z
+
+
+--> in the below class without changing the data type of the variable 
+print the output as 4,3,2,1 which is actually a reverse of the given number
+NOTE : type of x is int do not change it
+
+class MyNum{
+public static void main(String args){
+int x=1234;
+
+//write you code here 
+}
+       }
+
+Hint: keep dividing the number by 10
+
+
+--> write a java program to count the number of ZEROS in the given number
+Example : 
+input : 120050
+output : 3 zero's
+
+input : 1000024
+output: 4 zero's

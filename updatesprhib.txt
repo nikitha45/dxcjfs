@@ -1,0 +1,220 @@
+
+
+
+
+
+package com.myspr.demo.dao;
+
+import javax.transaction.Transactional;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.myspr.demo.Model.Author;
+
+@Transactional
+public class AuthorDao {
+
+
+@Autowired
+SessionFactory factory;
+
+
+public AuthorDao() {
+// TODO Auto-generated constructor stub
+}
+
+
+public AuthorDao(SessionFactory factory) {
+super();
+this.factory = factory;
+}
+
+
+public String saveAuthor(Author author){
+try{
+Session session=factory.getCurrentSession();
+session.save(author);
+return "Author Created";
+}
+catch (Exception e) {
+// TODO: handle exception
+e.printStackTrace();
+}
+
+return "cannot create Author";
+}
+
+public Author getAuthorById(int authorId){
+try{
+Session session=factory.getCurrentSession();
+Author author=(Author)session.get(Author.class,authorId);
+return author;
+}
+catch (Exception e) {
+// TODO: handle exception
+e.printStackTrace();
+}
+
+return null;
+}
+
+
+
+public String updateAuthorById(Author author){
+try{
+Session session=factory.getCurrentSession();
+
+System.out.println("author "+author);
+session.update("Author",author);
+return "Author Updated";
+}
+catch (Exception e) {
+// TODO: handle exception
+e.printStackTrace();
+}
+
+return "Cannot Update Auhtor";
+}
+
+
+}
+
+----------------------------------
+
+
+package com.myspr.demo;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.myspr.demo.Model.Author;
+import com.myspr.demo.dao.AuthorDao;
+
+
+@Controller
+public class HomeController {
+
+@Autowired
+AuthorDao dao;
+
+
+
+@RequestMapping(value="/")
+public String home(Model model)
+{
+return "home";
+}
+
+@RequestMapping(value="/display")
+public String display(Model model,@ModelAttribute Author author)
+{
+String status=dao.saveAuthor(author);
+model.addAttribute("status",status);
+return "display";
+}
+
+
+@RequestMapping(value="/updatePage")
+public String update()
+{
+return "updatePage";
+}
+
+int authorId=0;
+
+@RequestMapping(value="/searchForUpdate")
+public String searchForUpdate(Model model,@RequestParam("authorId") String authorId)
+{
+int authId=Integer.parseInt(authorId);
+this.authorId=authId;
+Author author=dao.getAuthorById(authId);
+model.addAttribute(author);
+return "updatePage";
+}
+
+
+@RequestMapping(value="/updateData")
+public String updateData(@ModelAttribute Author author)
+{
+author.setAuthorId(authorId);
+dao.updateAuthorById(author);
+return "updatePage";
+}
+
+
+
+}
+
+------------------------------------------------ home.jsp
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+<title>Home</title>
+</head>
+<body>
+<h1>
+Hello Author PLz Provide ur Details!  
+</h1>
+<form action="display">
+
+Name:<input type="text" name="authorName">
+<br>
+Id:<input type="text" name="authorId">
+<br>City: <input type="text" name="city">
+<br>
+<input type="submit" name="save author">
+</form>
+
+<form action="updatePage">
+<input type="submit" value="Update">
+</form>
+</body>
+</html>
+
+
+---------------------------update Page
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+<title>Update</title>
+</head>
+<body>
+<h1>
+Hello Author PLz Update ur Details!  
+</h1>
+<form action="searchForUpdate">
+Id:<input type="text" name="authorId" value="${author.authorId}">
+<input type="submit" value="search">
+</form>
+
+
+<form action="updateData">
+Name:<input type="text" name="authorName" value="${author.authorName}">
+<br>
+<br>City: <input type="text" name="city" value="${author.city}">
+<br>
+<input type="submit" value="update author">
+</form>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,26 @@
+
+search the product based on its name .. return all related products
+
+-------------------
+
+html file:
+searchProds.html
+
+Servlet:
+SearchProducts.java
+
+JSP file:
+DispSearchProds.java
+
+
+---
+package com.myserv.dao
+java class:
+ProductDao.java
+>> getProductByName() method
+---------
+
+
+
+
+
